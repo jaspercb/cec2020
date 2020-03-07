@@ -8,7 +8,7 @@ import curve2
 class Brain:
     def __init__(self, drone, unscrambled):
         assert(drone.x == 0 and drone.y == 0)
-        random.seed(0)
+        random.seed(1)
         self.n = len(unscrambled.getArr())
         self.drone = drone
         self.unscrambled = unscrambled
@@ -76,7 +76,6 @@ class Brain:
                 p = random.choice(list(self.remaining))
                 it += 1
                 if it > 1000: 
-                    import pdb; pdb.set_trace()
                     assert(False)
                 if p in self.visited:
                     continue
@@ -84,8 +83,6 @@ class Brain:
                     continue
                 good = True
                 break
-            if not good:
-                import pdb; pdb.set_trace()
             assert(good)
             # need to dump blocks off
             self.travelTo(p)
