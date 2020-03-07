@@ -42,6 +42,7 @@ class Brain:
         # get an upper bound on the number of blocks in this column
         h, _ = self.drone.scan()
         space = self.drone.space_left()
+        h += 1
 
         ox, oy = self.drone.x, self.drone.y
         while h > self.drone.space_left():
@@ -93,6 +94,7 @@ class Brain:
                 assert(good)
                 cx = nx
             self.travelTo((cx, cy))
+            print(self.drone.hopper)
         self.clearedColumns.add(self.prevColumn)
         self.satisfyDependencies()
 

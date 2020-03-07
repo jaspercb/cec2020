@@ -91,6 +91,7 @@ class Drone(object):
 
         h, _ = self.scan()
         assert(z > h)
+        assert(z < len(self.world))
 
         self.z = z + 1
         self.fireCallback()

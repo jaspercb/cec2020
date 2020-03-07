@@ -40,6 +40,10 @@ class VoxelArray:
         ddy = [-1, 1, 0, 0]
         has_support = z == 0
         for dx, dy in zip(ddx, ddy):
+            nx = x + dx
+            ny = y + dy
+            if nx < 0 or nx >= len(self) or ny < 0 or ny >= len(self):
+                continue
             if self[x + dx][y + dy][z] is not None:
                 has_support = True
                 break
