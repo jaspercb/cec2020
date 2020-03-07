@@ -1,5 +1,7 @@
 import sys
 
+import render
+
 class VoxelArray:
     def __init__(self, size):
         self.arr = [[[None]*size for _ in range(size)] for _ in range(size)]
@@ -9,6 +11,9 @@ class VoxelArray:
 
     def __getitem__(self, idx):
         return self.arr[idx]
+
+    def getArr(self):
+        return self.arr
 
 def parse(lines):
     # returns [unscrambled, scrambled]
@@ -29,6 +34,7 @@ def parse(lines):
             else:
                 color = None
             voxels[pos[0]][pos[1]][pos[2]] = color
+        return voxels
 
     voxel_dim = size**3
     unscrambled = make_array(lines[2:2+voxel_dim])
@@ -37,7 +43,9 @@ def parse(lines):
 
 def main(filename):
     with open(filename) as f:
-        parse([line.strip() for line in f.readlines()])
+        [unscrambled, scrambled] = parse([line.strip() for line in f.readlines()])
+        render.render(unscrambled.getArr())
+        render.render(scrambled.getArr())
 
 if __name__ == '__main__':
     main(sys.argv[1])
