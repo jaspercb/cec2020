@@ -1,8 +1,8 @@
 from collections import Counter
 
-UNKNOWN = "?"
-
 class Drone(object):
+    UNKNOWN = "?"
+
     def __init__(self, world, x, y):
         size = len(world[0])
 
@@ -16,7 +16,7 @@ class Drone(object):
         self.updateZ()
 
         # Part B
-        self.knowledge = [[[UNKNOWN]*size for _ in range(size)] for _ in range(size)]
+        self.knowledge = [[[Drone.UNKNOWN]*size for _ in range(size)] for _ in range(size)]
         self.ticks = 0
 
     def updateZ(self):
@@ -48,6 +48,7 @@ class Drone(object):
             if block:
                 self.knowledge[self.x][self.y][h] = block
                 return h, block
+            self.knowledge[self.x][self.y][h] = None
         return None
 
     def pickup(self):
