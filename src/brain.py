@@ -17,6 +17,7 @@ class Brain:
         self.prevColumn = None
         self.dumpingColumns = set()
         self.visited = set()
+        self.dumpedHeight = {}
 
         self.iterationOrder = []
         #self.iterationOrder = curve2.MakeCurve(self.n, self.n)
@@ -70,7 +71,7 @@ class Brain:
             if it > 1000: 
                 import pdb; pdb.set_trace()
                 assert(False)
-            for dx, dy in [(0, 1), (1, 0), (-1, 0), (0, -1)]:
+            for dx, dy in [(0, 4), (0, 3), (0, 2), (0, 1), (1, 0), (-1, 0), (0, -1)]:
                 nx, ny = cx + dx, cy + dy
                 if nx < 0 or nx >= self.n or ny < 0 or ny >= self.n:
                     continue
@@ -115,6 +116,7 @@ class Brain:
         print(len(self.iterationOrder), self.idx, len(self.completedColumns), self.n)
         self.clearedColumns.add(self.prevColumn)
         self.satisfyDependencies()
+        print('Ticks: {}'.format(self.drone.ticks))
 
     def dump(self, needed):
         while self.drone.space_left() < needed:
