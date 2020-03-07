@@ -38,11 +38,13 @@ class VoxelArray:
 
         ddx = [0, 0, -1, 1]
         ddy = [-1, 1, 0, 0]
-        has_support = False
+        has_support = z == 0
         for dx, dy in zip(ddx, ddy):
             if self[x + dx][y + dy][z] is not None:
                 has_support = True
                 break
+        if self[x][y][z-1] is not None:
+            has_support = True
 
         assert(has_support)
         self[x][y][z] = color
