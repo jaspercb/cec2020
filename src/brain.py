@@ -1,11 +1,14 @@
 import functools
+import random
 
 import deps
 import renderer
+import curve2
 
 class Brain:
     def __init__(self, drone, unscrambled):
         assert(drone.x == 0 and drone.y == 0)
+        random.seed(0)
         self.n = len(unscrambled.getArr())
         self.drone = drone
         self.unscrambled = unscrambled
@@ -17,15 +20,17 @@ class Brain:
         self.prevColumn = None
         self.dumpingColumns = set()
         self.visited = set()
+        self.dumpedFull = set()
         self.dumpedHeight = {}
 
-        self.iterationOrder = []
-        #self.iterationOrder = curve2.MakeCurve(self.n, self.n)
-        for y in range(self.n):
-            for x in range(self.n):
-                rx = x if y % 2 == 0 else self.n - 1 - x
-                p = (rx, y)
-                self.iterationOrder.append(p)
+        self.iterationOrder = curve2.MakeCurve(self.n, self.n)
+        self.remaining = set(self.iterationOrder)
+        #self.iterationOrder = []
+        #for y in range(self.n):
+        #    for x in range(self.n):
+        #        rx = x if y % 2 == 0 else self.n - 1 - x
+        #        p = (rx, y)
+        #        self.iterationOrder.append(p)
         self.idx = 0
     
 
@@ -67,15 +72,15 @@ class Brain:
             self.satisfyDependencies()
         while h > self.drone.space_left():
             good = False
-            it += 1
-            if it > 1000: 
-                import pdb; pdb.set_trace()
-                assert(False)
-            for dx, dy in [(0, 4), (0, 3), (0, 2), (0, 1), (1, 0), (-1, 0), (0, -1)]:
-                nx, ny = cx + dx, cy + dy
-                if nx < 0 or nx >= self.n or ny < 0 or ny >= self.n:
+            while True:
+                p = random.choice(list(self.remaining))
+                it += 1
+                if it > 1000: 
+                    import pdb; pdb.set_trace()
+                    assert(False)
+                if p in self.visited:
                     continue
-                if (nx, ny) not in self.unclearedColumns:
+                if p in self.dumpedFull:
                     continue
                 good = True
                 break
@@ -83,8 +88,8 @@ class Brain:
                 import pdb; pdb.set_trace()
             assert(good)
             # need to dump blocks off
-            self.travelTo((nx, ny))
-            cx, cy = nx, ny
+            self.travelTo(p)
+            cx, cy = p
             self.dump(h)
         self.travelTo((ox, oy))
         while True:
@@ -101,6 +106,7 @@ class Brain:
             col = self.iterationOrder[self.idx]
             self.idx += 1
             self.visited.add(col)
+            self.remaining.remove(col)
             assert(col in self.unclearedColumns or col in self.completedColumns)
             if col in self.completedColumns and col not in self.dumpedColumns:
                 continue
@@ -122,6 +128,7 @@ class Brain:
         while self.drone.space_left() < needed:
             h, c = self.drone.scan()
             if h >= self.n - 1:
+                self.dumpedFull.add((self.drone.x, self.drone.y))
                 break
             dropC = None
             if c and self.drone.hopper[c] > 0:
