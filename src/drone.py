@@ -92,6 +92,9 @@ class Drone(object):
         h, _ = self.scan()
         assert(z > h)
 
+        self.z = z + 1
+        self.fireCallback()
+
         self.world.place(color, self.x, self.y, z)
         self.knowledge[self.x][self.y][self.z] = color
         self.hopper[color] -= 1
