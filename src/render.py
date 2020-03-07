@@ -23,6 +23,10 @@ class Renderer(object):
       animation.FuncAnimation(self.fig, self.render, frames, blit=True, interval=100, repeat=False)
       plt.show()
 
+  def singleFrame(self, frame):
+      self.render(frame)
+      plt.show()
+
   def render(self, voxels):
       self.main_ax.cla()
       n = len(voxels)

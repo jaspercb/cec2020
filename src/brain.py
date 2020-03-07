@@ -67,7 +67,7 @@ class Brain:
         self.unclearedColumns.remove((ox, oy))
 
     def mainloop(self):
-        render.render(self.drone.world)
+        render.Renderer().singleFrame(self.drone.world)
         while True:
             col = (self.drone.x, self.drone.y)
             (cx, cy) = col
@@ -96,10 +96,10 @@ class Brain:
                 assert(good)
                 cx = nx
             self.travelTo((cx, cy))
-            render.render(self.drone.world)
+            render.Renderer().singleFrame(self.drone.world)
         self.clearedColumns.add(self.prevColumn)
         self.satisfyDependencies()
-        render.render(self.drone.world)
+        render.Renderer().singleFrame(self.drone.world)
 
     def dump(self, needed):
         while self.drone.space_left() < needed:
