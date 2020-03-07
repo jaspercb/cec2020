@@ -11,11 +11,12 @@ def render(voxels):
         for j, b in enumerate(a):
             for k, c in enumerate(b):
                 if c:
-                    filled[i][j][j] = True
+                    filled[i][j][k] = True
                     for l in range(3):
-                        facecolors[i][j][k][l] = c[l] / 255.
+                        facecolors[i][j][k][l] = c[l] / 256.
                 else:
+                    facecolors[i][j][k] = [0,0,0]
                     filled[i][j][k] = False
     ax.voxels(filled, facecolors=facecolors)
-    fig.show()
+    ax.set_axis_off()
     plt.show()
