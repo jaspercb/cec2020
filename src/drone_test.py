@@ -39,10 +39,10 @@ class TestBrain(unittest.TestCase):
 class TestVoxelArray(unittest.TestCase):
     def test_gravity(self):
         unscrambled, scrambled = parser.parse_file("../data/overhang.txt")
-        self.assertEqual(scrambled[4][3][2], None)
-        mydrone = drone.Drone(scrambled, 4, 4)
+        self.assertEqual(unscrambled[4][3][2], None)
+        mydrone = drone.Drone(unscrambled, 4, 4)
         mydrone.pickup()
-        self.assertNotEqual(scrambled[4][3][2], None)
+        self.assertNotEqual(unscrambled[4][3][2], None)
         # gravity better exist
 
 
