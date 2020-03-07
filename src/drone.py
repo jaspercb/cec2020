@@ -3,9 +3,15 @@ from collections import Counter
 class Drone(object):
     UNKNOWN = "?"
 
-    def __init__(self, world, x, y):
+    def __init__(self, world, x, y, callback=lambda pos, world:None):
+        """
+        Parameters:
+            callback: a function called as f((self.x, self.y, self.z), self.world)
+            called every time the worldstate or our position changes
+        """
         size = len(world[0])
 
+        self.callback = callback
         self.world = world
         self.capacity = int((size**0.5)/2)
 
@@ -19,14 +25,18 @@ class Drone(object):
         self.knowledge = [[[Drone.UNKNOWN]*size for _ in range(size)] for _ in range(size)]
         self.ticks = 0
 
+    def fireCallback(self):
+        self.callback((self.x, self.y, self.z), self.world)
+
     def updateZ(self):
         height = 0
         for h, block in enumerate(self.world[self.x][self.y]):
             if block:
                 height = max(h, height)
         self.z = height + 1
+        self.fireCallback()
 
-    def move (self, dx, dy):
+    def move(self, dx, dy):
         moving_x = dx != 0
         moving_y = dy != 0
 
@@ -39,6 +49,7 @@ class Drone(object):
 
         self.updateZ()
         self.ticks += 1
+        self.fireCallback()
 
     def scan(self):
         """
@@ -65,6 +76,7 @@ class Drone(object):
         self.world.remove(self.x, self.y, h)
         self.knowledge[self.x][self.y][self.z-1] = None
         self.z -= 1
+        self.fireCallback()
 
     def dropoff(self, color, z):
         # Check we have the block.
@@ -85,4 +97,5 @@ class Drone(object):
         self.hopper[color] -= 1
         if self.hopper[color] == 0:
             del self.hopper[color]
+        self.fireCallback()
 
