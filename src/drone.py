@@ -62,7 +62,7 @@ class Drone(object):
 
         self.hopper[color] += 1
         self.lastColor = color
-        self.world[self.x][self.y][self.z-1] = None
+        self.world.remove(self.x, self.y, h)
         self.knowledge[self.x][self.y][self.z-1] = None
         self.z -= 1
 

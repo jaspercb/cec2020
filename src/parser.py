@@ -2,6 +2,10 @@ import sys
 
 import render
 
+def vec3sum(a, b):
+    return tuple(map(sum, zip(a, b)))
+
+
 class VoxelArray:
     def __init__(self, size):
         self.arr = [[[None]*size for _ in range(size)] for _ in range(size)]
@@ -39,6 +43,69 @@ class VoxelArray:
 
         assert(has_support)
         self[x][y][z] = color
+
+    def apply_gravity_to_unsupported_blocks(self):
+        """
+        Say we have
+
+        YZ
+        X
+        -----
+
+        and we remove X
+
+        This should fall to
+        YZ
+        -----
+
+        Pos: the (x, y, z) of the removed block (X, in this case)
+        """
+        ddx = [0, 0, 0, -1, 1, 0]
+        ddy = [0, -1, 1, 0, 0, 0]
+        ddz = [-1, 0, 0, 0, 0, 1]
+
+        supported_blocks = set()
+
+        def visit(pos):
+            if pos in supported_blocks:
+                return
+            size = len(self[0])
+            x, y, z = pos
+            if min(x, y, z) < 0: return
+            if max(x, y, z) >= size: return
+            color = self[x][y][z]
+            if color is None:
+                return
+
+            supported_blocks.add(pos)
+            for offset in zip(ddx, ddy, ddz):
+                adjacent = vec3sum(pos, offset)
+                visit(adjacent)
+
+        all_blocks = set()
+        for x in range(len(self[0])):
+            for y in range(len(self[0])):
+                visit((x, y, 0))
+                for z in range(len(self[0])):
+                    if self[x][y][z] is not None:
+                        all_blocks.add((x, y, z))
+
+        unsupported = all_blocks - supported_blocks
+
+        if unsupported:
+            new_pos = {}
+            for (x, y, z) in unsupported:
+                new_pos[(x, y, z-1)] = self[x][y][z]
+                self[x][y][z] = None
+            for ((x, y, z), color) in new_pos.items():
+                self[x][y][z] = color
+
+            self.apply_gravity_to_unsupported_blocks()
+
+    def remove(self, x, y, z):
+        self[x][y][z] = None
+        self.apply_gravity_to_unsupported_blocks()
+
 
 def parse(lines):
     # returns [unscrambled, scrambled]
