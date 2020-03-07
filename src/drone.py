@@ -49,7 +49,6 @@ class Drone(object):
 
         self.updateZ()
         self.ticks += 1
-        self.fireCallback()
 
     def scan(self):
         """

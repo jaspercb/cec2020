@@ -11,11 +11,11 @@ def main(filename):
 
     frames = []
     def callback(pos, world):
-        x, y, z = pos
         world = copy.deepcopy(world)
         for x in range(len(world)):
             for y in range(len(world[x])):
                 world[x][y].append(None)
+        x, y, z = pos
         world[x][y][z] = (0, 0, 0)
         frames.append(world)
 

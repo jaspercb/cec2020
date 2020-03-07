@@ -20,7 +20,7 @@ class Renderer(object):
       self.fig.tight_layout()
 
   def animate(self, frames):
-      animation.FuncAnimation(self.fig, self.render, frames, blit=True, interval=100, repeat=False)
+      animation.FuncAnimation(self.fig, self.render, frames, blit=True, interval=20, repeat=False)
       plt.show()
 
   def singleFrame(self, frame):
