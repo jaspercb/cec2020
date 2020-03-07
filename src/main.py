@@ -28,7 +28,8 @@ def main(filename):
         traceback.print_exc()
 
     r = renderer.Renderer()
-    r.animate(frames[::20])
+    print(len(frames))
+    r.animate(frames[::100] + [frames[-1]] * 20)
 
 if __name__ == '__main__':
     main(sys.argv[1])

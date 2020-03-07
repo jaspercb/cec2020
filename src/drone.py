@@ -89,6 +89,8 @@ class Drone(object):
         self.lastColor = color
 
         h, _ = self.scan()
+        if z <= h:
+            import pdb; pdb.set_trace()
         assert(z > h)
         assert(z < len(self.world))
 

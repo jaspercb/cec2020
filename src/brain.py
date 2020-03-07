@@ -12,6 +12,7 @@ class Brain:
         self.deps = deps.Deps(unscrambled)
         self.clearedColumns = set()
         self.unclearedColumns = set((i, j) for i in range(self.n) for j in range(self.n))
+        self.dumpingColumns = set()
         self.prevColumn = None
 
     def satisfyDependencies(self):
@@ -47,20 +48,26 @@ class Brain:
 
         ox, oy = self.drone.x, self.drone.y
         it = 0
+        cx, cy = ox, oy
+        if h > self.drone.space_left():
+            self.satisfyDependencies()
         while h > self.drone.space_left():
             good = False
             it += 1
             if it > 1000: 
                 assert(False)
             for dx, dy in [(0, 1), (1, 0), (-1, 0), (0, -1)]:
-                nx, ny = self.drone.x + dx, self.drone.y + dy
+                nx, ny = cx + dx, cy + dy
                 if nx < 0 or nx >= self.n or ny < 0 or ny >= self.n:
+                    continue
+                if (nx, ny) not in self.unclearedColumns:
                     continue
                 good = True
                 break
             assert(good)
             # need to dump blocks off
-            self.drone.move(dx, dy)
+            self.travelTo((nx, ny))
+            cx, cy = nx, ny
             self.dump(h)
         self.travelTo((ox, oy))
         while True:
@@ -79,7 +86,6 @@ class Brain:
             if self.prevColumn:
                 self.clearedColumns.add(self.prevColumn)
             self.prevColumn = col
-            self.satisfyDependencies()
             ncol = None
             if ((cx == 0 and (cx+1, cy) in self.clearedColumns) 
                     or (cx == self.n-1 and (cx-1, cy) in self.clearedColumns)):
