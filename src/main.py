@@ -1,14 +1,30 @@
+import copy
 import sys
 
 import parser
 import brain
 import drone
+import renderer
 
 def main(filename):
     [unscrambled, scrambled] = parser.parse_file(filename)
-    d = drone.Drone(scrambled, 0, 0)
+    r = renderer.Renderer()
+
+    frames = []
+    def callback(pos, world):
+        x, y, z = pos
+        world = copy.deepcopy(world)
+        world[x][y][z] = (0, 0, 0)
+        frames.append(world)
+
+    d = drone.Drone(scrambled, 0, 0, callback)
     b = brain.Brain(d, unscrambled)
-    b.mainloop()
+    try:
+        b.mainloop()
+    except AssertionError:
+        pass
+
+    r.animate(frames)
 
 if __name__ == '__main__':
     main(sys.argv[1])

@@ -2,8 +2,6 @@ import functools
 
 import deps
 
-import render
-
 class Brain:
     def __init__(self, drone, unscrambled):
         assert(drone.x == 0 and drone.y == 0)
@@ -67,7 +65,6 @@ class Brain:
         self.unclearedColumns.remove((ox, oy))
 
     def mainloop(self):
-        render.Renderer().singleFrame(self.drone.world)
         while True:
             col = (self.drone.x, self.drone.y)
             (cx, cy) = col
@@ -96,10 +93,8 @@ class Brain:
                 assert(good)
                 cx = nx
             self.travelTo((cx, cy))
-            render.Renderer().singleFrame(self.drone.world)
         self.clearedColumns.add(self.prevColumn)
         self.satisfyDependencies()
-        render.Renderer().singleFrame(self.drone.world)
 
     def dump(self, needed):
         while self.drone.space_left() < needed:

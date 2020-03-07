@@ -1,6 +1,6 @@
 import sys
 
-from render import Renderer
+from renderer import Renderer
 
 def vec3sum(a, b):
     return tuple(map(sum, zip(a, b)))
