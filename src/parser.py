@@ -1,6 +1,6 @@
 import sys
 
-import render
+from render import Renderer
 
 def vec3sum(a, b):
     return tuple(map(sum, zip(a, b)))
@@ -18,7 +18,7 @@ class VoxelArray:
 
     def getArr(self):
         return self.arr
-    
+
     def place(self, color, x, y, z):
         for val in [x, y, z]:
             assert(0 <= val)
@@ -32,7 +32,7 @@ class VoxelArray:
             if val >= len(self.arr):
                 return len(self.arr) - 1
             return val
-        
+
         ddx = [0, 0, -1, 1]
         ddy = [-1, 1, 0, 0]
         has_support = False
@@ -140,9 +140,8 @@ def parse_file(filename):
 def main(filename):
     with open(filename) as f:
         [unscrambled, scrambled] = parse([line.strip() for line in f.readlines()])
-        render.render(unscrambled.getArr())
-        render.render(scrambled.getArr())
+        renderer = Renderer()
+        renderer.animate([scrambled.getArr(), unscrambled.getArr()])
 
 if __name__ == '__main__':
     main(sys.argv[1])
-
