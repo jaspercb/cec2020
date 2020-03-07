@@ -38,6 +38,14 @@ class TestBrain(unittest.TestCase):
         self.assertEqual(info, 5)
         """
 
+class TestVoxelArray(unittest.TestCase):
+    def test_gravity(self):
+        unscrambled, scrambled = parser.parse_file("../data/overhang.txt")
+        self.assertEqual(scrambled[4][3][2], None)
+        mydrone = drone.Drone(scrambled, 4, 4)
+        mydrone.pickup()
+        self.assertNotEqual(scrambled[4][3][2], None)
+        # gravity better exist
 
 
 if __name__ == '__main__':
