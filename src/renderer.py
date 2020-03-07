@@ -47,7 +47,7 @@ class Renderer(object):
         ax.set_axis_off()
 
       self.axs[0].view_init(azim=135, elev=-45)
-      self.axs[1].view_init(azim=135, elev=45)
+      self.axs[1].view_init(azim=305, elev=45)
 
       self.anax.cla()
       self.hopperax.cla()
