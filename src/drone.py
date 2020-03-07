@@ -95,7 +95,6 @@ class Drone(object):
         assert(z < len(self.world))
 
         self.z = z + 1
-        self.fireCallback()
 
         self.world.place(color, self.x, self.y, z)
         self.knowledge[self.x][self.y][z] = color

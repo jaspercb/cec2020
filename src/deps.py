@@ -18,10 +18,11 @@ class Deps(object):
                     c = stacked[i][j][k]
                     if not c:
                         continue
-                    if not prev and k == 0:
-                        self.next.add((i,j,k))
+                    if prev == None:
+                        if k == 0:
+                            self.next.add((i,j,k))
                         self.hasBelow[i][j][k] = True
-                    if prev != None and prev != k-1:
+                    if (prev != None and prev != k-1) or (prev == None and k > 0):
                         # dependencies on blocks around us
                         self.needsAdjacent[i][j][k] = True
                     prev = k
@@ -42,12 +43,15 @@ class Deps(object):
                 npos = ni, nj, k
                 if npos not in self.done and self.hasBelow[ni][nj][k]:
                     self.next.add(npos)
+        hasNext = False
         for nk in range(k+1, self.n):
             if self.stacked[i][j][nk]:
                 self.hasBelow[i][j][nk] = True
                 if (not self.needsAdjacent[i][j][nk] or self.hasAdjacent[i][j][nk]):
                     self.next.add((i, j, nk))
+                hasNext = True
                 break
+        return hasNext
 
     def getNext(self, freeColumns):
         return set((i, j, k) for (i, j, k) in self.next if (i, j) in freeColumns)
