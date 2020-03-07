@@ -13,10 +13,10 @@ class TestDrone(unittest.TestCase):
         # import pdb; pdb.set_trace()
         self.assertEqual((0, (255, 0, 0)), mydrone.scan())
 
-        mydrone.moveX(1)
+        mydrone.move(0, 1)
         self.assertEqual((0, (255, 0, 0)), mydrone.scan())
 
-        mydrone.moveY(1)
+        mydrone.move(1, 0)
         self.assertEqual((1, (255, 165, 0)), mydrone.scan())
 
         mydrone.pickup()
