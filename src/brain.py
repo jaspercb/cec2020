@@ -94,7 +94,7 @@ class Brain:
                 assert(good)
                 cx = nx
             self.travelTo((cx, cy))
-            print(self.drone.hopper)
+            print('New pos: {}, hopper: {}'.format((cx, cy), self.drone.hopper))
         self.clearedColumns.add(self.prevColumn)
         self.satisfyDependencies()
 
