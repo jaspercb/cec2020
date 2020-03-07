@@ -102,3 +102,5 @@ class Drone(object):
             del self.hopper[color]
         self.fireCallback()
 
+    def space_left(self):
+        return self.capacity - sum(self.hopper.values())
