@@ -19,16 +19,12 @@ class Brain:
         self.visited = set()
 
         self.iterationOrder = []
-        self.iterIndex = {}
-        self.groundLevel = {}
-        self.dumpedHeight = {}
+        #self.iterationOrder = curve2.MakeCurve(self.n, self.n)
         for y in range(self.n):
             for x in range(self.n):
                 rx = x if y % 2 == 0 else self.n - 1 - x
                 p = (rx, y)
-                self.iterIndex[p] = len(self.iterationOrder)
                 self.iterationOrder.append(p)
-                self.groundLevel[p] = 0
         self.idx = 0
     
 
@@ -119,7 +115,6 @@ class Brain:
         print(len(self.iterationOrder), self.idx, len(self.completedColumns), self.n)
         self.clearedColumns.add(self.prevColumn)
         self.satisfyDependencies()
-        assert(len(self.completedColumns) == self.n * self.n)
 
     def dump(self, needed):
         while self.drone.space_left() < needed:
