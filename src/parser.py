@@ -152,8 +152,9 @@ def main(filename):
     with open(filename) as f:
         [unscrambled, scrambled] = parse([line.strip() for line in f.readlines()])
         renderer = Renderer()
+        renderer.singleFrame(scrambled.getArr())
+        renderer = Renderer()
         renderer.singleFrame(unscrambled.getArr())
-        renderer.animate([scrambled.getArr(), unscrambled.getArr()])
 
 if __name__ == '__main__':
     main(sys.argv[1])

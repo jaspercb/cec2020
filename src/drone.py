@@ -19,14 +19,19 @@ class Drone(object):
         self.lastColor = None
         self.x = x
         self.y = y
-        self.updateZ()
 
         # Part B
         self.knowledge = [[[Drone.UNKNOWN]*size for _ in range(size)] for _ in range(size)]
         self.ticks = 0
 
+        self.updateZ()
+
     def fireCallback(self):
-        self.callback((self.x, self.y, self.z), self.world)
+        hopper_list = []
+        for elem, cnt in self.hopper.items():
+            hopper_list += [elem for _ in range(cnt)]
+        self.callback((self.x, self.y, self.z), self.world, self.ticks,
+                      hopper_list, self.capacity)
 
     def updateZ(self):
         height = 0
@@ -81,13 +86,6 @@ class Drone(object):
         # Check we have the block.
         assert(self.hopper[color] > 0)
 
-        if color == self.lastColor:
-            self.ticks += 2
-        else:
-            self.ticks += 3
-
-        self.lastColor = color
-
         h, _ = self.scan()
         if z <= h:
             import pdb; pdb.set_trace()
@@ -101,6 +99,13 @@ class Drone(object):
         self.hopper[color] -= 1
         if self.hopper[color] == 0:
             del self.hopper[color]
+        if color == self.lastColor:
+            self.ticks += 2
+        else:
+            self.ticks += 3
+
+        self.lastColor = color
+
         self.fireCallback()
 
     def space_left(self):

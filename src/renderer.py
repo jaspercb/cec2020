@@ -10,17 +10,24 @@ class Renderer(object):
                                 height_ratios=[1, 1, 1])
       self.axs = [self.fig.add_subplot(spec[0, 0], projection='3d'),
                   self.fig.add_subplot(spec[0:, 1], projection='3d')]
+
+      self.anax = self.fig.add_subplot(spec[0, 2])
+      self.hopperax = self.fig.add_subplot(spec[1:, 2])
+
       self.fig.tight_layout()
 
+  # a frame is a tuple of (ticks, voxels, hopper_contents, capacity)
   def animate(self, frames):
-      animation.FuncAnimation(self.fig, self.render, frames, blit=True, interval=20, repeat=False)
+      animation.FuncAnimation(self.fig, self.render, frames, blit=True,
+                              interval=20, repeat=False)
       plt.show()
 
-  def singleFrame(self, frame):
-      self.render(frame)
+  def singleFrame(self, voxels):
+      self.render((0, voxels, [], 1))
       plt.show()
 
-  def render(self, voxels):
+  def render(self, frame):
+      time, voxels, hopper, capacity = frame
       filled = np.empty_like(voxels, dtype='b')
       facecolors = np.ndarray(filled.shape + (3,))
 
@@ -39,6 +46,27 @@ class Renderer(object):
         ax.voxels(filled, facecolors=facecolors)
         ax.set_axis_off()
 
-      self.axs[0].view_init(azim=127, elev=-45)
+      self.axs[0].view_init(azim=135, elev=-45)
+      self.axs[1].view_init(azim=135, elev=45)
 
-      return self.axs
+      self.anax.cla()
+      self.hopperax.cla()
+
+      hopper_plot = np.zeros((capacity, 1, 4))
+      for i, a in enumerate(hopper):
+        for j, channel in enumerate(a):
+          hopper_plot[-(i+1)][0][j] = channel / 256
+        hopper_plot[-(i+1)][0][3] = 1
+      try:
+        self.hopperax.set_data(hopper_plot)
+      except AttributeError:
+        self.hopperax.imshow(hopper_plot)
+      self.hopperax.patch.set_edgecolor('gray')
+      self.hopperax.patch.set_linewidth('2')
+
+      anno_opts = dict(xy=(0.5, 0.5), xycoords='axes fraction',
+                       va='center', ha='center')
+      self.anax.annotate(f'{time} ticks, hopper {len(hopper)}/{capacity}', **anno_opts)
+      self.anax.set_axis_off()
+
+      return self.axs + [self.anax, self.hopperax]
