@@ -1,6 +1,7 @@
 import functools
 
 import deps
+import renderer
 
 class Brain:
     def __init__(self, drone, unscrambled):
@@ -95,6 +96,7 @@ class Brain:
                 cx = nx
             self.travelTo((cx, cy))
             print('New pos: {}, hopper: {}'.format((cx, cy), self.drone.hopper))
+            # renderer.Renderer().singleFrame(self.drone.world)
         self.clearedColumns.add(self.prevColumn)
         self.satisfyDependencies()
 

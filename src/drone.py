@@ -97,7 +97,7 @@ class Drone(object):
         self.fireCallback()
 
         self.world.place(color, self.x, self.y, z)
-        self.knowledge[self.x][self.y][self.z] = color
+        self.knowledge[self.x][self.y][z] = color
         self.hopper[color] -= 1
         if self.hopper[color] == 0:
             del self.hopper[color]

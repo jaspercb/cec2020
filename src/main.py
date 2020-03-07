@@ -8,7 +8,6 @@ import renderer
 
 def main(filename):
     [unscrambled, scrambled] = parser.parse_file(filename)
-    r = renderer.Renderer()
 
     frames = []
     def callback(pos, world):
@@ -24,6 +23,7 @@ def main(filename):
     except AssertionError:
         pass
 
+    r = renderer.Renderer()
     r.animate(frames)
 
 if __name__ == '__main__':
