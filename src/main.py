@@ -1,5 +1,6 @@
 import copy
 import sys
+import traceback
 
 import parser
 import brain
@@ -16,7 +17,7 @@ def main(filename):
             for y in range(len(world[x])):
                 world[x][y].append(None)
         x, y, z = pos
-        world[x][y][z] = (0, 0, 0)
+        world[x][y][z] = (0, 255, 0)
         frames.append(world)
 
     d = drone.Drone(scrambled, 0, 0, callback)
@@ -24,10 +25,10 @@ def main(filename):
     try:
         b.mainloop()
     except AssertionError:
-        pass
+        traceback.print_exc()
 
     r = renderer.Renderer()
-    r.animate(frames)
+    r.animate(frames[::20])
 
 if __name__ == '__main__':
     main(sys.argv[1])

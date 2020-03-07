@@ -50,6 +50,8 @@ class VoxelArray:
         if self[x][y][z-1] is not None:
             has_support = True
 
+        if not has_support:
+            import pdb; pdb.set_trace()
         assert(has_support)
         self[x][y][z] = color
 

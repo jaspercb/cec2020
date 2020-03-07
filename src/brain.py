@@ -46,8 +46,12 @@ class Brain:
         h += 1
 
         ox, oy = self.drone.x, self.drone.y
+        it = 0
         while h > self.drone.space_left():
             good = False
+            it += 1
+            if it > 1000: 
+                assert(False)
             for dx, dy in [(0, 1), (1, 0), (-1, 0), (0, -1)]:
                 nx, ny = self.drone.x + dx, self.drone.y + dy
                 if nx < 0 or nx >= self.n or ny < 0 or ny >= self.n:

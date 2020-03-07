@@ -21,9 +21,10 @@ class Deps(object):
                     if not prev and k == 0:
                         self.next.add((i,j,k))
                         self.hasBelow[i][j][k] = True
-                    if prev and prev != k-1:
+                    if prev != None and prev != k-1:
                         # dependencies on blocks around us
                         self.needsAdjacent[i][j][k] = True
+                    prev = k
 
 
     def place(self, pos):
