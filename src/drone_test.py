@@ -32,11 +32,9 @@ class TestBrain(unittest.TestCase):
         mybrain = brain.Brain(mydrone, copy.deepcopy(scrambled))
         info, goodpath = mybrain.maxInformationPath((0, 0), (3, 3))
         self.assertEqual(info, 6)
-        """
         mybrain.travelPath(goodpath)
         info, goodpath = mybrain.maxInformationPath((3, 3,), (0, 0))
         self.assertEqual(info, 5)
-        """
 
 class TestVoxelArray(unittest.TestCase):
     def test_gravity(self):

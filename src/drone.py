@@ -13,7 +13,7 @@ class Drone(object):
 
         self.callback = callback
         self.world = world
-        self.capacity = int((size**0.5)/2)
+        self.capacity = int((size**1.5)/2)
 
         self.hopper = Counter()
         self.lastColor = None
@@ -60,7 +60,7 @@ class Drone(object):
                 self.knowledge[self.x][self.y][h] = block
                 return h, block
             self.knowledge[self.x][self.y][h] = None
-        return None
+        return -1, None
 
     def pickup(self):
         assert(sum(self.hopper.values()) < self.capacity)

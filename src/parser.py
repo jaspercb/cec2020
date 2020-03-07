@@ -16,6 +16,9 @@ class VoxelArray:
     def __getitem__(self, idx):
         return self.arr[idx]
 
+    def __len__(self):
+        return len(self.arr)
+
     def getArr(self):
         return self.arr
 
